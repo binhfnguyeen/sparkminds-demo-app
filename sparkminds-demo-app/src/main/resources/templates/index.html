@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        a, button {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        a {
+            background-color: #3498db;
+            color: white;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+
+        button {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        form input {
+            padding: 7px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+        }
+
+        table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #eaf2ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Student List</h2>
+
+    <div class="actions">
+        <a href="/add">Add Student</a>
+
+        <form action="/search" onsubmit="return validateSearch()">
+            <input type="number" id="searchId" name="id" placeholder="Search by ID">
+            <button type="submit">Search</button>
+        </form>
+
+        <a href="/sort">Sort by Score</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+
+        <tr th:each="s : ${students}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.score}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+
+<script>
+    function validateSearch() {
+        const id = document.getElementById("searchId").value;
+        if (!id) {
+            window.location.href = "/";
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>
