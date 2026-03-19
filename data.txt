@@ -1,4 +1,4 @@
-1,Nguyen Van A,8,5
-2,Tran Thi B,7,2
 3,Le Van C,9,0
-4,Chau Binh Nguyen,8,5
+4,Chau Binh Nguyen,8,0
+6,Nguyen,7,0
+7,Chau Binh Nguyen,7,0

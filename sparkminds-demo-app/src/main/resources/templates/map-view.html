@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Map Demo</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            padding: 30px;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f9ff;
+        }
+
+        .key {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .value {
+            color: #2c3e50;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>MAP</h2>
+    <p>Dữ liệu lưu trữ theo cặp <b>Key (ID)</b> và <b>Value (Object)</b>.</p>
+
+    <table>
+        <tr>
+            <th>Key (Long)</th>
+            <th>Value (Student Object)</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:each="entry : ${studentMap}">
+            <td class="key" th:text="${entry.key}"></td>
+            <td class="value"
+                th:text="${'Student[name=' + entry.value.name + ', score=' + entry.value.score + ']'}">
+            </td>
+            <td>
+                <a class="delete-btn"
+                   th:href="@{'/delete/' + ${entry.key}(from='map-demo')}">
+                    Remove
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <a class="back" href="/">← Back to Menu</a>
+</div>
+</body>
+</html>

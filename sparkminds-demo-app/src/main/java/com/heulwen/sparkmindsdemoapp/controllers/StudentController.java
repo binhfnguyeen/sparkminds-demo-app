@@ -5,11 +5,9 @@ import com.heulwen.sparkmindsdemoapp.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class StudentController {
@@ -18,37 +16,53 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/")
-    public String home(Model model){
-        model.addAttribute("students", studentService.getStudents());
+    public String index() {
         return "index";
     }
 
-    @GetMapping("/add")
-    public String add(Model model){
-        model.addAttribute("student", new Student());
-        return "add";
+    // --- LIST DEMO ---
+    @GetMapping("/list-demo")
+    public String listDemo(Model model) {
+        List<Student> list = new ArrayList<>(studentService.getStudents());
+        model.addAttribute("students", list);
+        model.addAttribute("type", "LIST");
+        model.addAttribute("desc", "Cho phép trùng lặp, giữ thứ tự chèn.");
+        model.addAttribute("currentPath", "list-demo");
+        return "collection-view";
     }
 
-    @PostMapping("/add")
-    public String add(Student student){
-        studentService.add(student);
-        return "redirect:/";
+    // --- SET DEMO ---
+    @GetMapping("/set-demo")
+    public String setDemo(Model model) {
+        Set<Student> set = new HashSet<>(studentService.getStudents());
+        model.addAttribute("students", set);
+        model.addAttribute("type", "SET");
+        model.addAttribute("desc", "Không cho phép trùng lặp ID, không giữ thứ tự.");
+        model.addAttribute("currentPath", "set-demo");
+        return "collection-view";
     }
 
-    @GetMapping("/search")
-    public String search(@RequestParam Long id, Model model){
-        Student s = studentService.findById(id);
-
-        if (s != null) {
-            model.addAttribute("students", List.of(s));
+    // --- MAP DEMO ---
+    @GetMapping("/map-demo")
+    public String mapDemo(Model model) {
+        Map<Long, Student> map = new HashMap<>();
+        for (Student s : studentService.getStudents()) {
+            map.put(s.getId(), s);
         }
-
-        return "index";
+        model.addAttribute("studentMap", map);
+        return "map-view";
     }
 
-    @GetMapping("/sort")
-    public String sort(Model model) {
-        model.addAttribute("students", studentService.sortByScore());
-        return "index";
+    // --- CHỨC NĂNG CHUNG ---
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id, @RequestParam String from) {
+        studentService.delete(id);
+        return "redirect:/" + from;
+    }
+
+    @PostMapping("/add-demo")
+    public String add(@ModelAttribute Student student, @RequestParam String from) {
+        studentService.add(student);
+        return "redirect:/" + from;
     }
 }

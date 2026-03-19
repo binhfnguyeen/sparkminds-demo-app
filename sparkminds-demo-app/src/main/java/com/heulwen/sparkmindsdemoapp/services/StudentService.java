@@ -54,24 +54,22 @@ public class StudentService {
     }
 
     public void add(Student s){
-        Long newId = generateId();
-        s.setId(newId);
-
         students.add(s);
         FileUtil.writeFile(FILE_PATH, students);
     }
 
-    public Student findById(Long id){
-        Map<Long, Student> map = new HashMap<>();
-        for (Student s: students){
-            map.put(s.getId(), s);
-        }
-        return map.get(id);
+    public void delete(Long id) {
+        students.removeIf(s -> s.getId().equals(id));
+        FileUtil.writeFile(FILE_PATH, students);
     }
 
-    public List<Student> sortByScore(){
-        return students.stream()
-                .sorted(Comparator.comparingDouble(Student::getScore))
-                .toList();
+    public void update(Student s) {
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getId().equals(s.getId())) {
+                students.set(i, s);
+                break;
+            }
+        }
+        FileUtil.writeFile(FILE_PATH, students);
     }
 }
