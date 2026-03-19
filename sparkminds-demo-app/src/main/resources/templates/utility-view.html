@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Collections Utility Demo</title>
+    <style>
+        body { font-family: Arial; background: #f4f6f9; padding: 30px; }
+        .container { width: 80%; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .btn-util { padding: 10px 20px; border: none; border-radius: 8px; color: white; cursor: pointer; text-decoration: none; font-size: 14px; }
+        .btn-sort { background: #3498db; }
+        .btn-shuffle { background: #9b59b6; }
+        .btn-reverse { background: #e67e22; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #34495e; color: white; padding: 12px; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; }
+        .alert { background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Collections Utility Class</h2>
+    <div class="alert" th:text="${message}"></div>
+
+    <div class="toolbar">
+        <a href="/utility-demo?action=sort" class="btn-util btn-sort">Sort (Tên)</a>
+        <a href="/utility-demo?action=shuffle" class="btn-util btn-shuffle">Shuffle</a>
+        <a href="/utility-demo?action=reverse" class="btn-util btn-reverse">Reverse</a>
+        <a href="/" style="padding: 10px; color: #666; text-decoration: none;">← Quay lại</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+        <tr th:each="s : ${students}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.score}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

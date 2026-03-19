@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Map Demo</title>
+    <title th:text="${type}"></title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -17,25 +13,45 @@
         }
 
         .container {
-            width: 80%;
+            width: 85%;
             margin: auto;
             background: #fff;
-            padding: 25px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 10px;
             color: #2c3e50;
         }
 
         p {
             text-align: center;
             margin-bottom: 20px;
-            color: #666;
+            color: #7f8c8d;
         }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 7px 12px;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-primary { background: #3498db; }
+        .btn-warning { background: #e67e22; }
+        .btn-success { background: #27ae60; }
+        .btn-danger { background: #e74c3c; }
+
+        .btn:hover { opacity: 0.85; }
 
         table {
             width: 100%;
@@ -65,65 +81,68 @@
             color: #2980b9;
         }
 
-        .value {
-            color: #2c3e50;
-        }
+        .high { color: #27ae60; font-weight: bold; }
+        .low  { color: #e74c3c; font-weight: bold; }
 
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .delete-btn:hover {
-            background: #c0392b;
-        }
-
-        .back {
-            display: inline-block;
+        .note {
             margin-top: 15px;
-            text-decoration: none;
-            color: #3498db;
-            font-weight: 500;
-        }
-
-        .back:hover {
-            text-decoration: underline;
+            padding: 10px;
+            background: #fef5e7;
+            border-left: 5px solid #f39c12;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
 <div class="container">
-    <h2>MAP</h2>
-    <p>Dữ liệu lưu trữ theo cặp <b>Key (ID)</b> và <b>Value (Object)</b>.</p>
 
+    <h2 th:text="${type}"></h2>
+    <p th:text="${desc}"></p>
+
+    <!-- SWITCH -->
+    <div class="actions">
+        <div>
+            <a href="/map-demo" class="btn btn-primary">HashMap</a>
+            <a href="/map-demo?type=linked" class="btn btn-warning">LinkedHashMap</a>
+            <a href="/map-demo?type=tree" class="btn btn-success">TreeMap</a>
+        </div>
+
+        <a href="/" class="btn btn-danger">← Back</a>
+    </div>
+
+    <!-- TABLE -->
     <table>
         <tr>
-            <th>Key (Long)</th>
-            <th>Value (Student Object)</th>
+            <th>Key (ID)</th>
+            <th>Name</th>
+            <th>Score</th>
             <th>Action</th>
         </tr>
 
         <tr th:each="entry : ${studentMap}">
             <td class="key" th:text="${entry.key}"></td>
-            <td class="value"
-                th:text="${'Student[name=' + entry.value.name + ', score=' + entry.value.score + ']'}">
+            <td th:text="${entry.value.name}"></td>
+            <td th:classappend="${entry.value.score >= 8} ? 'high' : (${entry.value.score < 5} ? 'low' : '')"
+                th:text="${entry.value.score}">
             </td>
             <td>
-                <a class="delete-btn"
+                <a class="btn btn-danger"
                    th:href="@{'/delete/' + ${entry.key}(from='map-demo')}">
-                    Remove
+                    Delete
                 </a>
             </td>
         </tr>
     </table>
 
-    <a class="back" href="/">← Back to Menu</a>
+    <!-- NOTE -->
+    <div class="note">
+        HashMap: nhanh nhất, không thứ tự <br>
+        LinkedHashMap: giữ thứ tự insert <br>
+        TreeMap: tự động sort theo Key (O(log n)) <br>
+        Key không được trùng (put sẽ override)
+    </div>
+
 </div>
 </body>
 </html>

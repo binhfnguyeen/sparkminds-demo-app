@@ -4,11 +4,7 @@
     <title th:text="${type}"></title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -17,80 +13,93 @@
         }
 
         .container {
-            width: 80%;
+            width: 85%;
             margin: auto;
             background: #fff;
             padding: 25px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             color: #2c3e50;
         }
 
         p {
             text-align: center;
             margin-bottom: 20px;
-            color: #666;
+            color: #7f8c8d;
         }
 
         .actions {
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        form {
+        .left-actions {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
-        form input {
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-            transition: 0.2s;
+        form {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 10px;
         }
 
-        form input:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        input {
+            padding: 7px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
         }
 
         button {
-            background: #3498db;
-            color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
+            padding: 7px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #2980b9;
-        }
-
-        a {
-            text-decoration: none;
-            color: #3498db;
+            font-size: 14px;
             font-weight: 500;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .btn {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-primary { background: #3498db; }
+        .btn-warning { background: #e67e22; }
+        .btn-danger  { background: #e74c3c; }
+        .btn-success { background: #27ae60; }
+
+        .btn:hover { opacity: 0.85; }
+
+        .link {
+            color: #3498db;
+            font-weight: 500;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 12px;
             overflow: hidden;
-            border-radius: 10px;
         }
 
         th {
@@ -109,42 +118,114 @@
             background: #f5f9ff;
         }
 
-        td a {
+        .delete-link {
             color: #e74c3c;
             font-weight: bold;
         }
 
-        td a:hover {
-            text-decoration: underline;
+        .high { color: #27ae60; font-weight: bold; }
+        .low  { color: #e74c3c; font-weight: bold; }
+
+        .note {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fef5e7;
+            border-left: 5px solid #f39c12;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
 <div class="container">
+
     <h2 th:text="${type}"></h2>
     <p th:text="${desc}"></p>
 
     <div class="actions">
-        <form action="/add-demo" method="post">
-            <input type="hidden" name="from" th:value="${currentPath}">
-            <input type="number" step="1" placeholder="ID" name="id" required>
-            <input type="text" name="name" placeholder="Name" required>
-            <input type="number" step="0.1" name="score" placeholder="Score" required>
-            <button type="submit">Quick Add</button>
-        </form>
-        <a href="/">← Back to Menu</a>
+        <div class="left-actions">
+
+            <!-- ADD (List + Set đều dùng được) -->
+            <form action="/add-demo" method="post">
+                <input type="hidden" name="from" th:value="${currentPath}">
+                <input type="number" name="id" placeholder="ID" required>
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="number" step="0.1" name="score" placeholder="Score" required>
+                <button type="submit" class="btn-primary">Add</button>
+            </form>
+
+            <!-- LIST ONLY -->
+            <div th:if="${currentPath == 'list-demo'}" style="display:flex; gap:10px;">
+
+                <form action="/list-demo/get" method="get">
+                    <input type="number" name="index" placeholder="Index" style="width:80px;" required>
+                    <button class="btn-warning">Get(i)</button>
+                </form>
+
+                <form action="/list-demo/add-first" method="post">
+                    <input type="hidden" name="id" value="999">
+                    <input type="hidden" name="name" value="First Student">
+                    <input type="hidden" name="score" value="10">
+                    <button class="btn-primary">Add First</button>
+                </form>
+
+                <form action="/list-demo/add-last" method="post">
+                    <input type="hidden" name="id" value="1000">
+                    <input type="hidden" name="name" value="Last Student">
+                    <input type="hidden" name="score" value="5">
+                    <button class="btn-primary">Add Last</button>
+                </form>
+
+                <a href="/list-demo/remove-first" class="btn btn-danger">Remove First</a>
+                <a href="/list-demo/remove-last" class="btn btn-danger">Remove Last</a>
+            </div>
+
+            <!-- SET ONLY -->
+            <div th:if="${currentPath == 'set-demo'}" style="display:flex; gap:10px;">
+                <a href="/set-demo" class="btn btn-primary">HashSet</a>
+                <a href="/set-demo?type=linked" class="btn btn-warning">LinkedHashSet</a>
+                <a href="/set-demo?type=tree" class="btn btn-success">TreeSet</a>
+            </div>
+
+        </div>
+
+        <!-- BACK -->
+        <a href="/" class="link">← Back</a>
     </div>
 
     <table>
-        <tr><th>ID</th><th>Name</th><th>Score</th><th>Action</th></tr>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th th:if="${currentPath != 'set-demo'}">Action</th>
+        </tr>
+
         <tr th:each="s : ${students}">
             <td th:text="${s.id}"></td>
             <td th:text="${s.name}"></td>
-            <td th:text="${s.score}"></td>
-            <td><a th:href="@{'/delete/' + ${s.id}(from=${currentPath})}">Delete</a></td>
+            <td th:classappend="${s.score >= 8} ? 'high' : (${s.score < 5} ? 'low' : '')"
+                th:text="${s.score}">
+            </td>
+
+            <!-- SET không cần delete -->
+            <td th:if="${currentPath != 'set-demo'}">
+                <a class="delete-link"
+                   th:href="@{'/delete/' + ${s.id}(from=${currentPath})}">
+                    Delete
+                </a>
+            </td>
         </tr>
     </table>
+
+    <!-- NOTE CHO SET -->
+    <div th:if="${currentPath == 'set-demo'}" class="note">
+        Set không cho phép phần tử trùng (dựa vào equals + hashCode) <br>
+        HashSet: nhanh, không thứ tự <br>
+        LinkedHashSet: giữ thứ tự thêm <br>
+        TreeSet: tự động sắp xếp
+    </div>
+
 </div>
 </body>
 </html>

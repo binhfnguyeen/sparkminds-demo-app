@@ -40,6 +40,50 @@ public class StudentService {
         }
     }
 
+    // --- DEMO ARRAYLIST ---
+    // ArrayList có cấu trúc mảng động, cho phép get(index) với tốc độ O(1) [cite: 20, 29]
+    public Student getByIndex(int index) {
+        if (index >= 0 && index < students.size()) {
+            return students.get(index);
+        }
+        return null;
+    }
+
+    // --- DEMO LINKEDLIST ---
+    // Ép kiểu hoặc khởi tạo mới sang LinkedList để sử dụng addFirst/addLast/removeFirst/removeLast
+    // LinkedList tối ưu cho việc chèn/xóa ở đầu và cuối danh sách
+    public void addFirst(Student s) {
+        LinkedList<Student> linkedList = new LinkedList<>(students);
+        linkedList.addFirst(s);
+        this.students = linkedList;
+        FileUtil.writeFile(FILE_PATH, students);
+    }
+
+    public void addLast(Student s) {
+        LinkedList<Student> linkedList = new LinkedList<>(students);
+        linkedList.addLast(s);
+        this.students = linkedList;
+        FileUtil.writeFile(FILE_PATH, students);
+    }
+
+    public void removeFirst() {
+        if (!students.isEmpty()) {
+            LinkedList<Student> linkedList = new LinkedList<>(students);
+            linkedList.removeFirst();
+            this.students = linkedList;
+            FileUtil.writeFile(FILE_PATH, students);
+        }
+    }
+
+    public void removeLast() {
+        if (!students.isEmpty()) {
+            LinkedList<Student> linkedList = new LinkedList<>(students);
+            linkedList.removeLast();
+            this.students = linkedList;
+            FileUtil.writeFile(FILE_PATH, students);
+        }
+    }
+
     private Long generateId() {
         if (students.isEmpty()) return 1L;
 
@@ -54,6 +98,10 @@ public class StudentService {
     }
 
     public void add(Student s){
+        if (s.getId() == null) {
+            s.setId(generateId());
+        }
+
         students.add(s);
         FileUtil.writeFile(FILE_PATH, students);
     }
