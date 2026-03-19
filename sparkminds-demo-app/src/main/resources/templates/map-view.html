@@ -40,6 +40,7 @@
         }
 
         .btn {
+            display: inline-block;
             padding: 7px 12px;
             border-radius: 6px;
             color: white;
@@ -82,15 +83,24 @@
             color: #2980b9;
         }
 
-        .high { color: #27ae60; font-weight: bold; }
-        .low  { color: #e74c3c; font-weight: bold; }
-
         .note {
             margin-top: 15px;
             padding: 10px;
             background: #fef5e7;
             border-left: 5px solid #f39c12;
             font-size: 14px;
+        }
+
+        .link {
+            color: #3498db;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: auto;
+            padding-left: 20px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -109,7 +119,7 @@
             <a href="/map-demo?type=tree" class="btn btn-success">TreeMap</a>
         </div>
 
-        <a href="/" class="btn btn-danger">← Back</a>
+        <a href="/" class="link">← Back</a>
     </div>
 
     <!-- TABLE -->

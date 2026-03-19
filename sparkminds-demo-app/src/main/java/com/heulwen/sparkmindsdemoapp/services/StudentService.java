@@ -41,7 +41,7 @@ public class StudentService {
     }
 
     // --- DEMO ARRAYLIST ---
-    // ArrayList có cấu trúc mảng động, cho phép get(index) với tốc độ O(1) [cite: 20, 29]
+    // ArrayList có cấu trúc mảng động, cho phép get(index) với tốc độ O(1)
     public Student getByIndex(int index) {
         if (index >= 0 && index < students.size()) {
             return students.get(index);

@@ -86,7 +86,6 @@
 
         .btn-primary { background: #3498db; }
         .btn-warning { background: #e67e22; }
-        .btn-danger  { background: #e74c3c; }
         .btn-success { background: #27ae60; }
 
         .btn:hover { opacity: 0.85; }
@@ -94,6 +93,13 @@
         .link {
             color: #3498db;
             font-weight: 500;
+            text-decoration: none;
+            margin-left: auto;
+            padding-left: 20px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
         }
 
         table {
@@ -124,15 +130,34 @@
             font-weight: bold;
         }
 
-        .high { color: #27ae60; font-weight: bold; }
-        .low  { color: #e74c3c; font-weight: bold; }
-
         .note {
             margin-top: 15px;
             padding: 10px;
             background: #fef5e7;
             border-left: 5px solid #f39c12;
             font-size: 14px;
+        }
+
+        .btn-outline-danger {
+            background: transparent;
+            border: 1.5px solid #e74c3c;
+            color: #e74c3c;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-danger:hover {
+            background: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+        }
+
+        .list-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-left: 10px;
+            border-left: 2px solid #eee;
         }
     </style>
 </head>
@@ -156,10 +181,10 @@
             </form>
 
             <!-- LIST ONLY -->
-            <div th:if="${currentPath == 'list-demo'}" style="display:flex; gap:10px;">
+            <div th:if="${currentPath == 'list-demo'}" class="list-actions-group">
 
                 <form action="/list-demo/get" method="get">
-                    <input type="number" name="index" placeholder="Index" style="width:80px;" required>
+                    <input type="number" name="index" placeholder="Idx" style="width:60px;" required>
                     <button class="btn-warning">Get(i)</button>
                 </form>
 
@@ -167,18 +192,18 @@
                     <input type="hidden" name="id" value="999">
                     <input type="hidden" name="name" value="First Student">
                     <input type="hidden" name="score" value="10">
-                    <button class="btn-primary">Add First</button>
+                    <button class="btn-primary">Add Head</button>
                 </form>
 
                 <form action="/list-demo/add-last" method="post">
                     <input type="hidden" name="id" value="1000">
                     <input type="hidden" name="name" value="Last Student">
                     <input type="hidden" name="score" value="5">
-                    <button class="btn-primary">Add Last</button>
+                    <button class="btn-primary">Add Tail</button>
                 </form>
 
-                <a href="/list-demo/remove-first" class="btn btn-danger">Remove First</a>
-                <a href="/list-demo/remove-last" class="btn btn-danger">Remove Last</a>
+                <a href="/list-demo/remove-first" class="btn btn-outline-danger">Rem Head</a>
+                <a href="/list-demo/remove-last" class="btn btn-outline-danger">Rem Tail</a>
             </div>
 
             <!-- SET ONLY -->

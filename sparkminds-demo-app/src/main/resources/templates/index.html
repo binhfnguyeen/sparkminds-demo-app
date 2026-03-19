@@ -1,35 +1,171 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Java Collection Demo</title>
-        <style>
-            body { font-family: Arial; background: #f4f6f9; text-align: center; padding: 50px; }
-            .menu { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-            .card { padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; width: 200px; transition: 0.3s; }
-            .card:hover { transform: translateY(-5px); background: #3498db; color: white; }
-        </style>
-    </head>
-    <body>
-        <h1>Java Collection Framework Demo</h1>
-        <div class="menu">
-            <a href="/list-demo" class="card"><h3>List</h3><p>ArrayList Implementation</p></a>
-            <a href="/set-demo" class="card"><h3>Set</h3><p>HashSet Implementation</p></a>
-            <a href="/map-demo" class="card"><h3>Map</h3><p>HashMap Implementation</p></a>
-        </div>
-        <h1>Collections Utility Demo</h1>
-        <div class="menu">
-            <a href="/utility-demo" class="card" style="border-top: 5px solid #e67e22;">
-                <h3>Utility</h3>
-                <p>Collections Static Methods</p>
-            </a>
-        </div>
-        <h1>Interalization Demo</h1>
-        <div class="menu">
-            <a href="/i18n-demo" class="card" style="border-top: 5px solid #e67e22;">
-                <h3>Resource Bundle</h3>
-                <p>Convert language</p>
-            </a>
-        </div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>SparkMinds App Demo</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            padding: 40px;
+            color: #2c3e50;
+        }
+
+        h1 {
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 26px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: "";
+            width: 80px;
+            height: 4px;
+            background: #3498db;
+            display: block;
+            margin: 8px auto;
+            border-radius: 2px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 220px;
+            padding: 25px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: #333;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            top: 0;
+            left: 0;
+            background: #3498db;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            background: #3498db;
+            color: white;
+        }
+
+        .card:hover p {
+            color: #ecf0f1;
+        }
+
+        .utility::before { background: #e67e22; }
+        .i18n::before { background: #9b59b6; }
+        .date::before { background: #2ecc71; }
+        .file::before { background: #34495e; }
+        .pdf::before { background: #e74c3c; }
+
+        .utility:hover { background: #e67e22; }
+        .i18n:hover { background: #9b59b6; }
+        .date:hover { background: #2ecc71; }
+        .file:hover { background: #34495e; }
+        .pdf:hover { background: #e74c3c; }
+
+    </style>
+</head>
+
+<body>
+
+<h1>Java Collection Framework</h1>
+<div class="menu">
+    <a href="/list-demo" class="card">
+        <h3>List</h3>
+        <p>ArrayList / LinkedList</p>
+    </a>
+
+    <a href="/set-demo" class="card">
+        <h3>Set</h3>
+        <p>HashSet / TreeSet</p>
+    </a>
+
+    <a href="/map-demo" class="card">
+        <h3>Map</h3>
+        <p>HashMap / TreeMap</p>
+    </a>
+</div>
+
+<h1>Collections Utility</h1>
+<div class="menu">
+    <a href="/utility-demo" class="card utility">
+        <h3>Utility</h3>
+        <p>Sort / Shuffle / Reverse</p>
+    </a>
+</div>
+
+<h1>Internationalization</h1>
+<div class="menu">
+    <a href="/i18n-demo" class="card i18n">
+        <h3>Resource Bundle</h3>
+        <p>Multi-language</p>
+    </a>
+</div>
+
+<h1>Date & Time</h1>
+<div class="menu">
+    <a href="/date-demo" class="card date">
+        <h3>Date API</h3>
+        <p>Legacy vs Java 8+</p>
+    </a>
+</div>
+
+<h1>File Handling</h1>
+<div class="menu">
+    <a href="/file-demo" class="card file">
+        <h3>File IO</h3>
+        <p>TXT / CSV / Excel</p>
+    </a>
+</div>
+
+<h1>PDF Generation</h1>
+<div class="menu">
+    <a href="/file-demo/export-pdf-hardcode" class="card pdf">
+        <h3>Hardcode PDF</h3>
+        <p>iText 5 / Manual Drawing</p>
+    </a>
+
+    <a href="/file-demo/export-pdf-template" class="card pdf">
+        <h3>Template PDF</h3>
+        <p>Thymeleaf / HTML to PDF</p>
+    </a>
+</div>
+
+</body>
 </html>

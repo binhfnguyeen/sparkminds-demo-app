@@ -31,8 +31,6 @@ public class StudentController {
         return "collection-view";
     }
 
-    // --- CÁC THAO TÁC NÂNG CAO CHO LIST ---
-
     @GetMapping("/list-demo/get")
     public String getByIndex(@RequestParam int index, Model model) {
         Student s = studentService.getByIndex(index);
@@ -156,7 +154,6 @@ public class StudentController {
         return "utility-view";
     }
 
-    // --- CHỨC NĂNG CHUNG ---
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id, @RequestParam String from) {
         studentService.delete(id);

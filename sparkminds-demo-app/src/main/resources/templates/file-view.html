@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File Demo</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .container {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 { color: #2c3e50; }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .txt { background: #7f8c8d; }
+        .csv { background: #27ae60; }
+        .excel { background: #2ecc71; }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .note {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        table th {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+        }
+
+        table td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        table tr:hover {
+            background: #f5f9ff;
+        }
+
+        .link {
+            color: #3498db;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: auto;
+            padding-left: 20px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 th:text="${type}"></h2>
+    <p th:text="${desc}"></p>
+
+    <div class="buttons">
+        <a href="/file-demo/export-txt" class="btn txt">Export TXT</a>
+        <a href="/file-demo/export-csv" class="btn csv">Export CSV</a>
+        <a href="/file-demo/export-excel" class="btn excel">Export Excel</a>
+    </div>
+
+    <div class="note">
+        TXT → raw text <br>
+        CSV → structured text (comma-separated) <br>
+        Excel → binary format (Apache POI)
+    </div>
+
+    <br>
+    <a href="/" class="link">← Back</a>
+
+    <!-- UPLOAD -->
+    <form action="/file-demo/upload" method="post" enctype="multipart/form-data" style="margin-top:20px;">
+        <input type="file" name="file" required>
+        <button class="btn txt">Upload & Read</button>
+    </form>
+
+    <p th:text="${message}" style="margin-top:10px; color:green;"></p>
+
+    <!-- TABLE -->
+    <table th:if="${students != null}" style="margin-top:20px; width:100%; border-collapse: collapse;">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+
+        <tr th:each="s : ${students}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.score}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

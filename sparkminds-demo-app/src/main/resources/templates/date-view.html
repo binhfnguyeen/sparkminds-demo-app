@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Date & Time Internal Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            padding: 40px 20px;
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-back:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        /* Demo Sections */
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #edf2f7;
+        }
+
+        h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legacy-section { border-top: 4px solid #e74c3c; }
+        .modern-section { border-top: 4px solid #2ecc71; }
+        .epoch-section { border-top: 4px solid #3498db; }
+
+        .line {
+            margin-bottom: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .label {
+            color: #3498db;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .value {
+            color: #2d3748;
+        }
+
+        /* Status Badges */
+        .status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .danger { background: #fff5f5; color: #e74c3c; border: 1px solid #feb2b2; }
+        .ok { background: #f0fff4; color: #2ecc71; border: 1px solid #9ae6b4; }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 30px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 th:text="${type}">DATE INTERNAL MONITOR</h1>
+        <a href="/" class="btn-back">← Back to Menu</a>
+    </header>
+
+    <section class="legacy-section">
+        <h2>Legacy API Inspection (Calendar)</h2>
+        <div class="line">
+            <span class="label">ORIGINAL_DATE:</span>
+            <span class="value" th:text="${originalDate}"></span>
+        </div>
+        <div class="line">
+            <span class="label">MODIFIED_DATE (+7D):</span>
+            <span class="value" th:text="${modifiedDate}"></span>
+        </div>
+        <div class="line">
+            <span class="label">MONTH_INDEX (0-BASED):</span>
+            <span class="value" style="color: #e74c3c; font-weight: 800;" th:text="${month}"></span>
+        </div>
+        <div class="status danger">
+            Calendar is MUTABLE: Đối tượng gốc đã bị thay đổi trực tiếp.
+        </div>
+    </section>
+
+    <section class="modern-section">
+        <h2>Modern Java Time (LocalDate)</h2>
+        <div class="line">
+            <span class="label">ROOT_LOCAL_DATE:</span>
+            <span class="value" th:text="${localDate}"></span>
+        </div>
+        <div class="line">
+            <span class="label">NEW_PLUS_7_DATE:</span>
+            <span class="value" th:text="${plus7}"></span>
+        </div>
+        <div class="line">
+            <span class="label">IDENTICAL_OBJECT?</span>
+            <span class="value" th:text="${isSameObject}"></span>
+        </div>
+        <div class="status ok">
+            LocalDate is IMMUTABLE: Luôn tạo đối tượng mới, an toàn cho đa luồng.
+        </div>
+    </section>
+
+    <section class="epoch-section">
+        <h2>Epoch Raw Data</h2>
+        <div class="line">
+            <span class="label">UNIX_TIMESTAMP:</span>
+            <span class="value" th:text="${timestamp}"></span> <span style="font-size: 0.8rem; color: #64748b;">ms</span>
+        </div>
+        <p style="font-size: 0.85rem; margin-top: 10px; color: #64748b; padding: 0 10px;">
+            * Giải thích: Date thực chất là một lớp bọc (wrapper) quanh giá trị Long (số miliseconds tính từ 01/01/1970).
+        </p>
+    </section>
+
+    <div class="footer-note">
+        "API cũ: Tháng 0-11 | API mới: Tháng 1-12. Khuyến nghị chuyển đổi toàn bộ sang java.time."
+    </div>
+</div>
+
+</body>
+</html>

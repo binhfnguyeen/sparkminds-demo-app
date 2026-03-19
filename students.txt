@@ -1,0 +1,9 @@
+999 - First Student - 10.0
+1 - Nguyen Van A - 8.0
+2 - Tran Thi B - 7.0
+3 - Le Van C - 9.0
+2 - a - 6.0
+1 - a - 7.0
+1000 - Last Student - 5.0
+1 - abc - 5.0
+4 - Bình Nguyên - 6.0
