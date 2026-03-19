@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{title}"></title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #d9e4f5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 500px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 { color: #2c3e50; margin-bottom: 10px; }
+        p { color: #7f8c8d; margin-bottom: 30px; }
+        .lang-info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px dashed #3498db;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .btn-nav {
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .btn-nav:hover { background: #2980b9; transform: translateY(-2px); }
+        .link-back { color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 th:text="#{title}"></h2>
+    <p th:text="#{welcome}"></p>
+
+    <div class="lang-info">
+        <span th:text="#{current_lang}"></span>
+        <strong th:text="${currentLocale}"></strong>
+    </div>
+
+    <div class="menu-grid">
+        <a href="/list-demo" class="btn-nav" th:text="#{list_demo}"></a>
+        <a href="/set-demo" class="btn-nav" th:text="#{set_demo}"></a>
+        <a href="/map-demo" class="btn-nav" th:text="#{map_demo}"></a>
+        <a href="/add" class="btn-nav" th:text="#{add_student}"></a>
+    </div>
+
+    <a href="/" class="link-back" th:text="#{back_to_menu}"></a>
+</div>
+</body>
+</html>
