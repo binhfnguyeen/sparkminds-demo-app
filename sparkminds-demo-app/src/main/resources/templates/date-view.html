@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Java Date & Time Internal Demo</title>
+    <title>Modern Java Time API Demo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -73,9 +73,9 @@
             gap: 8px;
         }
 
-        .legacy-section { border-top: 4px solid #e74c3c; }
-        .modern-section { border-top: 4px solid #2ecc71; }
-        .epoch-section { border-top: 4px solid #3498db; }
+        .date-section { border-top: 4px solid #3498db; }
+        .datetime-section { border-top: 4px solid #f39c12; }
+        .zoned-section { border-top: 4px solid #9b59b6; }
 
         .line {
             margin-bottom: 12px;
@@ -85,30 +85,29 @@
             padding: 10px 15px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
         }
 
         .label {
-            color: #3498db;
+            color: #2c3e50;
             font-weight: bold;
-            margin-right: 10px;
+            width: 180px;
+            flex-shrink: 0;
         }
 
         .value {
-            color: #2d3748;
+            color: #059669;
+            font-weight: 500;
         }
 
-        /* Status Badges */
-        .status {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 6px 12px;
-            border-radius: 20px;
+        .explanation {
             font-size: 0.85rem;
-            font-weight: 600;
+            margin-top: 10px;
+            color: #64748b;
+            padding: 0 5px;
+            line-height: 1.5;
         }
-
-        .danger { background: #fff5f5; color: #e74c3c; border: 1px solid #feb2b2; }
-        .ok { background: #f0fff4; color: #2ecc71; border: 1px solid #9ae6b4; }
 
         .footer-note {
             text-align: center;
@@ -123,61 +122,57 @@
 
 <div class="container">
     <header>
-        <h1 th:text="${type}">DATE INTERNAL MONITOR</h1>
+        <h1 th:text="${type}">MODERN JAVA TIME DEMO</h1>
         <a href="/" class="btn-back">← Back to Menu</a>
     </header>
 
-    <section class="legacy-section">
-        <h2>Legacy API Inspection (Calendar)</h2>
+    <section class="date-section">
+        <h2>1. LocalDate (Chỉ ngày)</h2>
         <div class="line">
-            <span class="label">ORIGINAL_DATE:</span>
-            <span class="value" th:text="${originalDate}"></span>
-        </div>
-        <div class="line">
-            <span class="label">MODIFIED_DATE (+7D):</span>
-            <span class="value" th:text="${modifiedDate}"></span>
-        </div>
-        <div class="line">
-            <span class="label">MONTH_INDEX (0-BASED):</span>
-            <span class="value" style="color: #e74c3c; font-weight: 800;" th:text="${month}"></span>
-        </div>
-        <div class="status danger">
-            Calendar is MUTABLE: Đối tượng gốc đã bị thay đổi trực tiếp.
-        </div>
-    </section>
-
-    <section class="modern-section">
-        <h2>Modern Java Time (LocalDate)</h2>
-        <div class="line">
-            <span class="label">ROOT_LOCAL_DATE:</span>
+            <span class="label">TODAY:</span>
             <span class="value" th:text="${localDate}"></span>
         </div>
         <div class="line">
-            <span class="label">NEW_PLUS_7_DATE:</span>
-            <span class="value" th:text="${plus7}"></span>
+            <span class="label">PLUS_1_WEEK:</span>
+            <span class="value" th:text="${nextWeek}"></span>
         </div>
-        <div class="line">
-            <span class="label">IDENTICAL_OBJECT?</span>
-            <span class="value" th:text="${isSameObject}"></span>
-        </div>
-        <div class="status ok">
-            LocalDate is IMMUTABLE: Luôn tạo đối tượng mới, an toàn cho đa luồng.
+        <div class="explanation">
+            * <b>Đặc điểm:</b> Chỉ lưu trữ Năm-Tháng-Ngày (VD: YYYY-MM-DD). Phù hợp cho ngày sinh nhật, ngày lễ. Không chứa thông tin về thời gian cụ thể trong ngày hay múi giờ.
         </div>
     </section>
 
-    <section class="epoch-section">
-        <h2>Epoch Raw Data</h2>
+    <section class="datetime-section">
+        <h2>2. LocalDateTime (Ngày + Giờ)</h2>
         <div class="line">
-            <span class="label">UNIX_TIMESTAMP:</span>
-            <span class="value" th:text="${timestamp}"></span> <span style="font-size: 0.8rem; color: #64748b;">ms</span>
+            <span class="label">CURRENT_DATETIME:</span>
+            <span class="value" th:text="${localDateTime}"></span>
         </div>
-        <p style="font-size: 0.85rem; margin-top: 10px; color: #64748b; padding: 0 10px;">
-            * Giải thích: Date thực chất là một lớp bọc (wrapper) quanh giá trị Long (số miliseconds tính từ 01/01/1970).
-        </p>
+        <div class="line">
+            <span class="label">PLUS_5H_30M:</span>
+            <span class="value" th:text="${nextFewHours}"></span>
+        </div>
+        <div class="explanation">
+            * <b>Đặc điểm:</b> Gồm Ngày và Giờ, nhưng <b>thiếu ngữ cảnh múi giờ (Timezone)</b>. Nó chỉ là một mốc thời gian trên đồng hồ treo tường cục bộ.
+        </div>
+    </section>
+
+    <section class="zoned-section">
+        <h2>3. ZonedDateTime (Ngày + Giờ + Múi giờ)</h2>
+        <div class="line">
+            <span class="label">TIME IN VIETNAM:</span>
+            <span class="value" th:text="${zonedDateTimeVN}"></span>
+        </div>
+        <div class="line">
+            <span class="label">SAME TIME IN TOKYO:</span>
+            <span class="value" th:text="${zonedDateTimeTokyo}"></span>
+        </div>
+        <div class="explanation">
+            * <b>Đặc điểm:</b> Xác định một khoảnh khắc tuyệt đối trên dòng thời gian toàn cầu bằng cách gắn thêm `ZoneId`. Cùng một lúc, ở VN là 10h thì ở Tokyo sẽ là 12h. Lý tưởng cho các ứng dụng đa quốc gia.
+        </div>
     </section>
 
     <div class="footer-note">
-        "API cũ: Tháng 0-11 | API mới: Tháng 1-12. Khuyến nghị chuyển đổi toàn bộ sang java.time."
+        "Tất cả các class trong java.time đều là Immutable (bất biến) và Thread-safe (an toàn cho đa luồng)."
     </div>
 </div>
 

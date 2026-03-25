@@ -83,6 +83,44 @@ public class FileHandlingController {
         return "file-view";
     }
 
+    @GetMapping("/file-demo/interactive")
+    public String showInteractiveDemo(Model model) {
+        try {
+            String currentContent = fileHandlingService.readInteractiveFile();
+            model.addAttribute("fileContent", currentContent);
+        } catch (Exception e) {
+            model.addAttribute("fileContent", "Lỗi khi đọc file!");
+        }
+
+        model.addAttribute("type", "RANDOM ACCESS INTERACTIVE");
+        return "file-view";
+    }
+
+    @PostMapping("/file-demo/interactive/write")
+    public String processInteractiveWrite(
+            @RequestParam("content") String content,
+            @RequestParam(value = "position", required = false) Long position,
+            @RequestParam("actionType") String actionType,
+            Model model) {
+
+        try {
+            boolean isAppend = "append".equals(actionType);
+
+            // Xử lý xuống dòng nếu người dùng muốn thêm vào cuối
+            String contentToWrite = isAppend ? "\n" + content : content;
+
+            String updatedContent = fileHandlingService.writeInteractiveFile(contentToWrite, position, isAppend);
+
+            model.addAttribute("message", "Thao tác thành công!");
+            model.addAttribute("fileContent", updatedContent);
+        } catch (Exception e) {
+            model.addAttribute("message", "Lỗi xử lý tệp tin: " + e.getMessage());
+        }
+
+        model.addAttribute("type", "RANDOM ACCESS INTERACTIVE");
+        return "file-view";
+    }
+
     private ResponseEntity<InputStreamResource> buildResponse(File file, String filename) throws Exception {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)

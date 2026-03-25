@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>File Demo</title>
+    <meta charset="UTF-8">
+    <title>File Handling & Random Access Demo</title>
 
     <style>
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI';
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #eef2f7, #d9e4f5);
             padding: 40px;
             text-align: center;
+            color: #2c3e50;
         }
 
         .container {
-            width: 60%;
+            width: 70%;
+            max-width: 1000px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -20,13 +25,16 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        h2 { color: #2c3e50; }
+        h2 { color: #2c3e50; margin-bottom: 5px; text-transform: uppercase; }
+
+        .desc { color: #7f8c8d; margin-bottom: 25px; font-size: 0.95rem; }
 
         .buttons {
-            margin-top: 30px;
+            margin-top: 20px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -34,49 +42,117 @@
             border-radius: 8px;
             color: white;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
 
         .txt { background: #7f8c8d; }
         .csv { background: #27ae60; }
         .excel { background: #2ecc71; }
+        .random { background: #8e44ad; } /* Màu tím cho Random Access */
 
-        .btn:hover {
-            opacity: 0.85;
-        }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
         .note {
             margin-top: 20px;
             font-size: 14px;
             color: #555;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            display: inline-block;
+            border-left: 4px solid #3498db;
+        }
+
+        table {
+            margin-top: 25px;
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
         }
 
         table th {
             background: #3498db;
             color: white;
-            padding: 10px;
+            padding: 12px;
+            font-weight: 600;
         }
 
         table td {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
+            padding: 10px;
+            border-bottom: 1px solid #ecf0f1;
             text-align: center;
         }
 
-        table tr:hover {
-            background: #f5f9ff;
-        }
+        table tr:hover { background: #f5f9ff; }
 
-        .link {
+        .link-back {
+            display: block;
+            margin-top: 25px;
             color: #3498db;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
-            margin-left: auto;
-            padding-left: 20px;
         }
 
-        .link:hover {
-            text-decoration: underline;
+        .link-back:hover { text-decoration: underline; }
+
+        /* Style cho khu vực Random Access Interactive */
+        .interactive-box {
+            margin-top: 40px;
+            text-align: left;
+            padding: 25px;
+            background: #fdfbf7;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+            font-weight: 500;
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .code-preview {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 100px;
+            font-family: 'Consolas', monospace;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.5;
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -84,46 +160,85 @@
 <body>
 
 <div class="container">
-    <h2 th:text="${type}"></h2>
-    <p th:text="${desc}"></p>
+    <h2 th:text="${type}">FILE DEMO</h2>
+    <p class="desc" th:text="${desc}"></p>
 
     <div class="buttons">
         <a href="/file-demo/export-txt" class="btn txt">Export TXT</a>
         <a href="/file-demo/export-csv" class="btn csv">Export CSV</a>
         <a href="/file-demo/export-excel" class="btn excel">Export Excel</a>
+        <a href="/file-demo/interactive" class="btn random">Interactive Random Access</a>
     </div>
 
-    <div class="note">
-        TXT → raw text <br>
-        CSV → structured text (comma-separated) <br>
-        Excel → binary format (Apache POI)
+    <p th:if="${message != null}" th:text="${message}" style="margin-top: 20px; color: #27ae60; font-weight: bold; font-size: 1.1rem;"></p>
+
+    <div th:if="${type != 'RANDOM ACCESS INTERACTIVE'}" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 25px;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Upload & Đọc File</h3>
+        <form action="/file-demo/upload" method="post" enctype="multipart/form-data" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+            <input type="file" name="file" required style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; background: #fafafa;">
+            <button class="btn txt" type="submit">Upload & Read</button>
+        </form>
+
+        <div class="note">
+            <b>Định dạng hỗ trợ:</b><br>
+            • TXT → Raw text (cách nhau bởi dấu phẩy)<br>
+            • CSV → Structured text (opencsv)<br>
+            • Excel (.xlsx) → Binary format (Apache POI)
+        </div>
     </div>
 
-    <br>
-    <a href="/" class="link">← Back</a>
-
-    <!-- UPLOAD -->
-    <form action="/file-demo/upload" method="post" enctype="multipart/form-data" style="margin-top:20px;">
-        <input type="file" name="file" required>
-        <button class="btn txt">Upload & Read</button>
-    </form>
-
-    <p th:text="${message}" style="margin-top:10px; color:green;"></p>
-
-    <!-- TABLE -->
-    <table th:if="${students != null}" style="margin-top:20px; width:100%; border-collapse: collapse;">
+    <table th:if="${students != null and not #lists.isEmpty(students)}">
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Score</th>
         </tr>
-
         <tr th:each="s : ${students}">
             <td th:text="${s.id}"></td>
             <td th:text="${s.name}"></td>
             <td th:text="${s.score}"></td>
         </tr>
     </table>
+
+    <div th:if="${type == 'RANDOM ACCESS INTERACTIVE'}" class="interactive-box">
+        <h3 style="color: #d35400; margin-bottom: 20px; border-bottom: 2px solid #f39c12; padding-bottom: 10px;">Trình Thao Tác RandomAccessFile</h3>
+
+        <form action="/file-demo/interactive/write" method="post">
+
+            <div class="form-group">
+                <label>Nội dung cần ghi (Text):</label>
+                <input type="text" name="content" required placeholder="Nhập chuỗi ký tự..." class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Vị trí Byte / Index (Seek):</label>
+                <input type="number" name="position" value="0" min="0" class="form-control" style="width: 200px; display: inline-block;">
+                <span style="font-size: 0.85rem; color: #e74c3c; margin-left: 10px;">*Chỉ có tác dụng khi chọn chế độ "Ghi đè".</span>
+            </div>
+
+            <div class="radio-group">
+                <label style="cursor: pointer;">
+                    <input type="radio" name="actionType" value="overwrite" checked>
+                    1. Ghi đè (Overwrite) từ vị trí Byte chỉ định
+                </label>
+                <label style="cursor: pointer;">
+                    <input type="radio" name="actionType" value="append">
+                    2. Thêm vào cuối file (Append) - Bỏ qua vị trí Seek
+                </label>
+            </div>
+
+            <button type="submit" class="btn csv" style="margin-top: 15px; width: 100%;">
+                Thực thi thao tác Ghi (Execute Write)
+            </button>
+        </form>
+
+        <div style="margin-top: 35px;">
+            <h4 style="color: #34495e; margin-bottom: 10px;">Nội dung file hiện tại trên đĩa cứng:</h4>
+            <pre class="code-preview" th:text="${fileContent}"></pre>
+        </div>
+    </div>
+
+    <a href="/" class="link-back">← Back to Main Menu</a>
 </div>
 
 </body>

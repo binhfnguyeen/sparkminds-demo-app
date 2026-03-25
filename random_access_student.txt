@@ -1,0 +1,3 @@
+Student ID: 101, Score: 8.5
+Student ID: 102, Score: 9.9
+Student ID: 103, Score: 9.0

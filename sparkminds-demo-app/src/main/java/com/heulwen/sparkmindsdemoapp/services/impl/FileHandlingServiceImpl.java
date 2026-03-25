@@ -129,4 +129,43 @@ public class FileHandlingServiceImpl implements FileHandlingService {
         workbook.close();
         return list;
     }
+
+    @Override
+    public String readInteractiveFile() throws IOException {
+        File file = new File("interactive_demo.txt");
+        if (!file.exists()) {
+            return "[File chưa được tạo hoặc đang trống]";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            String line;
+            while ((line = raf.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String writeInteractiveFile(String content, Long position, boolean append) throws IOException {
+        File file = new File("interactive_demo.txt");
+
+        try (RandomAccessFile raf = new RandomAccessFile(file, "rw")) {
+            if (append) {
+                // Thêm vào cuối: Nhảy đến đúng vị trí byte cuối cùng
+                raf.seek(raf.length());
+            } else {
+                // Ghi đè tại vị trí cụ thể. Xử lý an toàn nếu position lớn hơn kích thước file
+                long validPosition = (position != null && position >= 0 && position <= raf.length()) ? position : raf.length();
+                raf.seek(validPosition);
+            }
+
+            // Ghi nội dung do người dùng nhập
+            raf.writeBytes(content);
+        }
+
+        // Sau khi ghi xong, đọc lại toàn bộ file để trả về cho UI
+        return readInteractiveFile();
+    }
 }

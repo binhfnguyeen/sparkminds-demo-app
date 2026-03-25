@@ -30,6 +30,7 @@ public class MainApp {
         // Downcasting - Từ kiểu tổng quát đến kiểu cụ thể hơn
         if (polymorphicPayment instanceof Refundable) {
             Refundable refundAction = (Refundable) polymorphicPayment;
+            System.out.println(refundAction.hello("Nguyen"));
             refundAction.refund(200000);
         }
     }

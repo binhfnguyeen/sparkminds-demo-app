@@ -7,4 +7,8 @@ public interface Refundable {
 
     // Mọi hàm mặc định là public abstract
     boolean refund(double refundAmount);
+
+    default String hello(String name) {
+        return String.format("Hello, %s!", name);
+    }
 }

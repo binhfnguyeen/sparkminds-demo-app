@@ -1,18 +1,7 @@
 package com.heulwen.sparkmindsdemoapp.services;
 
 import com.heulwen.sparkmindsdemoapp.models.Student;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
-
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface FileHandlingService {
@@ -33,4 +22,10 @@ public interface FileHandlingService {
 
     // ===== READ EXCEL =====
     List<Student> readExcel(InputStream inputStream) throws IOException;
+
+    // Đọc nội dung file demo tương tác
+    String readInteractiveFile() throws IOException;
+
+    // Ghi file: append = true (thêm vào cuối), append = false (ghi đè tại position)
+    String writeInteractiveFile(String content, Long position, boolean append) throws IOException;
 }

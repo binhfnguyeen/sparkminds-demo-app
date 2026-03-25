@@ -17,7 +17,7 @@ public class DateController {
     public String dateDemo(Model model) {
         Map<String, Object> dateData = dateService.getDateComparisonData();
         model.addAllAttributes(dateData);
-        model.addAttribute("type", "DATE INTERNAL MONITOR");
+        model.addAttribute("type", "MODERN JAVA TIME API DEMO");
         return "date-view";
     }
 }

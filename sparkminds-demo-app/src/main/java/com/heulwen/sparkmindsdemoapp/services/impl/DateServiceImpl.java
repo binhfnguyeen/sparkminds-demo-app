@@ -4,8 +4,10 @@ import com.heulwen.sparkmindsdemoapp.services.DateService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,35 +17,35 @@ public class DateServiceImpl implements DateService {
     public Map<String, Object> getDateComparisonData() {
         Map<String, Object> dataMap = new HashMap<>();
 
-        // ===== 1. LEGACY API (Calendar/Date) =====
-        Calendar cal = Calendar.getInstance();
-        cal.set(2026, 0, 1); // Month = 0 (Tháng 1)
-        Date originalDate = cal.getTime();
+        // ===== 1. LOCALDATE (Chỉ Ngày) =====
+        // Dùng để biểu diễn một ngày không có thời gian và không có múi giờ (VD: Sinh nhật, Ngày nghỉ)
+        LocalDate localDate = LocalDate.now();
+        LocalDate nextWeek = localDate.plusWeeks(1);
 
-        // Minh họa tính Mutable (Dễ gây lỗi side-effect)
-        cal.add(Calendar.DAY_OF_MONTH, 7);
-        Date modifiedDate = cal.getTime();
-        int month = cal.get(Calendar.MONTH); // Vẫn là 0-based
+        // ===== 2. LOCALDATETIME (Ngày + Giờ) =====
+        // Dùng để biểu diễn ngày và giờ, nhưng KHÔNG có múi giờ.
+        // Nó phụ thuộc vào đồng hồ cục bộ của hệ thống đang chạy.
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime nextFewHours = localDateTime.plusHours(5).plusMinutes(30);
 
-        // ===== 2. MODERN API (java.time) =====
-        LocalDate localDate = LocalDate.of(2026, 1, 1); // Month = 1 rõ ràng
-        LocalDate plus7 = localDate.plusDays(7);
+        // ===== 3. ZONEDDATETIME (Ngày + Giờ + Múi Giờ) =====
+        // Biểu diễn ngày giờ chính xác tại một khu vực địa lý cụ thể. Rất quan trọng cho ứng dụng quốc tế.
+        ZonedDateTime zonedDateTimeVN = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        // Chuyển đổi cùng một thời điểm đó sang múi giờ Tokyo (Nhật Bản đi trước VN 2 tiếng)
+        ZonedDateTime zonedDateTimeTokyo = zonedDateTimeVN.withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
 
-        // Kiểm tra tính Immutable (Bất biến)
-        // plusDays trả về object mới, không thay đổi object cũ
-        boolean isSameObject = (localDate == plus7);
-
-        // ===== 3. TIMESTAMP & METADATA =====
-        long timestamp = new Date().getTime();
+        // Format để hiển thị ZonedDateTime cho dễ nhìn trên UI
+        DateTimeFormatter zdtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
         // Đưa dữ liệu vào Map
-        dataMap.put("originalDate", originalDate);
-        dataMap.put("modifiedDate", modifiedDate);
-        dataMap.put("month", month);
         dataMap.put("localDate", localDate);
-        dataMap.put("plus7", plus7);
-        dataMap.put("isSameObject", isSameObject);
-        dataMap.put("timestamp", timestamp);
+        dataMap.put("nextWeek", nextWeek);
+
+        dataMap.put("localDateTime", localDateTime);
+        dataMap.put("nextFewHours", nextFewHours);
+
+        dataMap.put("zonedDateTimeVN", zonedDateTimeVN.format(zdtFormatter));
+        dataMap.put("zonedDateTimeTokyo", zonedDateTimeTokyo.format(zdtFormatter));
 
         return dataMap;
     }
