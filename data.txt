@@ -1,3 +1,6 @@
 3,Le Van C,9,0
-1,Tran Van A,8,6
-2,Nguyen Thi B,7,5
+1,Tran Van A,8,0
+2,Nguyen Thi B,7,0
+1,Châu Bình Nguyên,7,9
+4,Chau Binh Nguyen,7,8
+4,Chau Binh Nguyen,7,9
